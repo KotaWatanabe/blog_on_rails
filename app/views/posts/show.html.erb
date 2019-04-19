@@ -1,0 +1,68 @@
+<div class="container-fluid padding">
+<h3><%= @post.title %></h3>
+
+<p class="lead"><%= @post.body %></p>
+
+<small>
+Posted <%= time_ago_in_words(@post.created_at) %> ago
+</small>
+
+<div>
+    <button class="btn btn-outline-primary edit-btn my-2">
+    <small>
+        <%= link_to "Edit", edit_post_path(@post) %>
+    </small> 
+    </button>
+    <button class="btn btn-outline-primary delete-btn my-2">
+    <small>
+        <%= link_to "Delete", post_path(@post),method: :delete, data: {confirm: "Are you sure?"} %>
+    </small> 
+    </button>
+</div>
+
+<section>
+  <h4>Comments</h4>
+
+  <%= form_with(model: [@post, @comment], local: true) do |f| %>
+    <% if @comment.errors.present? %>
+      <p class="form-errors">
+        <%= @comment.errors.full_messages.join(", ") %>
+      </p>
+    <% end %>
+
+
+    <div class="form-group">
+      <%= f.text_area(
+      :body, cols: 50, rows: 5,
+      placeholder: "What'on your mind?",
+      class: "form-control"
+      ) %>
+    </div>
+    <%= f.submit "Comment", class:"btn btn-outline-primary" %>
+  <% end %>
+
+  <hr />
+
+
+      <% @comments.each do |comment| %>
+          <p>
+          <%= comment.body %> <br />
+          <small>
+            <%= link_to(
+            "Delete",
+            post_comment_path(@post, comment),
+            method: :delete, data: {
+              confirm: "Are you sure?"
+            }
+            ) %>
+          </small>
+          <small>
+            Commented <%= time_ago_in_words(comment.created_at) %> ago
+          </small>
+        </p>
+   
+      <% end %>
+  
+</section>
+
+</div>
