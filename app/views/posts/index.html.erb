@@ -1,4 +1,7 @@
 <div class="container-fluid">
+<% if flash[:alert] %>
+  <p><%= flash[:alert] %></p>
+<% end %>
     <div class="row">
         <% @posts.take(15).each do | post|%>
             <div class="row col-md-6 col-lg-4 mx-auto">

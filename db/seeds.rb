@@ -5,9 +5,22 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+PASSWORD = "supersecret"
 
 Comment.delete_all
 Post.delete_all
+User.delete_all
+
+10.times do
+  name = Faker::Name.first_name
+  User.create(
+    name: name,
+    email: "#{name.downcase}.@example.com",
+    password: PASSWORD
+  )
+end
+
+users = User.all
 
 50.times do
     created_at = Faker::Date.backward(365 * 5)
@@ -16,10 +29,11 @@ Post.delete_all
       body: Faker::ChuckNorris.fact,
       created_at: created_at,
       updated_at: created_at,
+      user: users.sample
     )
     if p.valid?
       p.comments = rand(0..15).times.map do
-        Comment.new(body: Faker::GreekPhilosophers.quote)
+        Comment.new(body: Faker::GreekPhilosophers.quote, user: users.sample)
       end
     end
   end
